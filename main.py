@@ -33,10 +33,19 @@ def main():
     import os
 
     check(REVIEW)
+    text = REVIEW
+    # Byte budget: the gate counts characters, the tie-break counts
+    # bytes, so pin the exact output size and prove the file matches.
+    assert len(text.encode("utf-8")) == 87, "output must be 87 bytes"
+    # The last word is the payoff (criterion 5): guard it.
+    assert text.endswith("looked."), "last word must pay off"
+    assert "'Link'" in text, "the one concrete detail must survive"
 
     os.makedirs("/output", exist_ok=True)
     with open("/output/entry.txt", "w", encoding="utf-8") as f:
-        f.write(REVIEW)
+        f.write(text)
+    with open("/output/entry.txt", encoding="utf-8") as f:
+        assert f.read() == text, "written file does not match the review"
 
 
 if __name__ == "__main__":
